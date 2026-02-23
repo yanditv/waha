@@ -10,7 +10,7 @@ coolify:
   # Exposed Ports
   ports:
     - container: 3000
-      host: 3000
+      host: ${WAHA_HOST_PORT:-3000}
       scheme: http
       name: dashboard
 
@@ -22,6 +22,11 @@ coolify:
 
   # Environment Variables (editable in Coolify)
   env:
+    - key: WAHA_HOST_PORT
+      value: "3000"
+      description: Host port to expose WAHA
+      mandatory: true
+      
     - key: WAHA_DASHBOARD_USERNAME
       value: admin
       description: Dashboard username

@@ -5,7 +5,7 @@ services:
     image: devlikeapro/waha
     container_name: waha
     ports:
-      - "${WAHA_PORT:-3000}:3000"
+      - "${WAHA_HOST_PORT:-3000}:3000"
     volumes:
       - waha_sessions:/app/.sessions
     environment:
