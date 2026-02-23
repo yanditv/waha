@@ -19,6 +19,9 @@ coolify:
     - name: waha_sessions
       path: /app/.sessions
       description: WhatsApp session data
+    - name: waha_env
+      path: /app/env
+      description: WAHA environment config (persist credentials)
 
   # Environment Variables (editable in Coolify)
   env:
@@ -64,10 +67,6 @@ coolify:
     interval: 30
     timeout: 10
     retries: 3
-
-  # Actions (post-deployment)
-  post_deploy:
-    - command: docker exec waha init-waha /app/env
-      description: Initialize WAHA credentials
-      run_at: "start"
-      continue_on_error: true
+    authentication:
+      username: ${WAHA_DASHBOARD_USERNAME}
+      password: ${WAHA_DASHBOARD_PASSWORD}

@@ -8,6 +8,7 @@ services:
       - "${WAHA_HOST_PORT:-3000}:3000"
     volumes:
       - waha_sessions:/app/.sessions
+      - waha_env:/app/env
     environment:
       - TZ=${TZ:-America/Lima}
       - WAHA_DASHBOARD_USERNAME=${WAHA_DASHBOARD_USERNAME:-admin}
@@ -19,11 +20,13 @@ services:
       - WAHA_SESSION_CLEANUP_INTERVAL_MS=${WAHA_SESSION_CLEANUP_INTERVAL_MS:-60}
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/api/health"]
+      test: ["CMD", "wget", "--spider", "-q", "--user=${WAHA_DASHBOARD_USERNAME}", "--password=${WAHA_DASHBOARD_PASSWORD}", "http://localhost:3000/api/health"]
       interval: 30s
       timeout: 10s
       retries: 3
 
 volumes:
   waha_sessions:
+    driver: local
+  waha_env:
     driver: local
