@@ -1,6 +1,6 @@
 coolify:
   name: WAHA
-  description: WhatsApp HTTP API - Docker-based WhatsApp API
+  description: WhatsApp HTTP API - Docker-based WhatsApp API (CORE version)
   icon: whatsapp
 
   resource:
