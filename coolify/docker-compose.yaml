@@ -10,7 +10,7 @@ services:
       - waha_sessions:/app/.sessions
       - waha_env:/app/env
     environment:
-      - TZ=${TZ:-America/Lima}
+      - TZ=${TZ:-America/Guayaquil}
       - WAHA_DASHBOARD_USERNAME=${WAHA_DASHBOARD_USERNAME:-admin}
       - WAHA_DASHBOARD_PASSWORD=${WAHA_DASHBOARD_PASSWORD}
       - WAHA_API_KEY=${WAHA_API_KEY}
@@ -20,7 +20,7 @@ services:
       - WAHA_SESSION_CLEANUP_INTERVAL_MS=${WAHA_SESSION_CLEANUP_INTERVAL_MS:-60}
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "--user=${WAHA_DASHBOARD_USERNAME}", "--password=${WAHA_DASHBOARD_PASSWORD}", "http://localhost:3000/api/health"]
+      test: ["CMD", "wget", "--spider", "-q", "-O", "-", "--header=X-Api-Key:${WAHA_API_KEY}", "http://localhost:3000/api/server/status"]
       interval: 30s
       timeout: 10s
       retries: 3

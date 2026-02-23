@@ -63,10 +63,7 @@ coolify:
   # Health Check
   health_check:
     enabled: true
-    url: http://localhost:3000/api/health
+    url: http://localhost:3000/api/server/status
     interval: 30
     timeout: 10
     retries: 3
-    authentication:
-      username: ${WAHA_DASHBOARD_USERNAME}
-      password: ${WAHA_DASHBOARD_PASSWORD}

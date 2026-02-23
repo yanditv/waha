@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   waha:
-    image: devlikeapro/waha
+    image: devlikeapro/waha:arm
     container_name: waha
     ports:
       - "3000:3000"
@@ -13,7 +13,7 @@ services:
       - ./env/.env
     restart: unless-stopped
     environment:
-      - TZ=America/Lima
+      - TZ=America/Guayaquil
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/api/health"]
       interval: 30s
