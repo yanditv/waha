@@ -3,29 +3,34 @@ coolify:
   description: WhatsApp HTTP API - Docker-based WhatsApp API
   icon: whatsapp
 
-  # Resource Configuration
   resource:
     type: docker-compose
     
-  # Exposed Ports
   ports:
     - container: 3000
       host: ${WAHA_HOST_PORT:-3000}
       scheme: http
       name: dashboard
 
-  # Persistent Volumes
   volumes:
     - name: waha_sessions
       path: /app/.sessions
       description: WhatsApp session data
+    - name: waha_media
+      path: /app/.media
+      description: WhatsApp media files
 
-  # Environment Variables (editable in Coolify)
   env:
     - key: WAHA_HOST_PORT
       value: "3000"
       description: Host port to expose WAHA
       mandatory: true
+      
+    - key: WAHA_API_KEY
+      value: "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4"
+      description: API key for authentication
+      mandatory: true
+      type: password
       
     - key: WAHA_DASHBOARD_USERNAME
       value: admin
@@ -33,29 +38,49 @@ coolify:
       
     - key: WAHA_DASHBOARD_PASSWORD
       value: "admin123456789012345678901234"
-      description: Dashboard password (change in production)
+      description: Dashboard password
       mandatory: true
       type: password
       
-    - key: WAHA_API_KEY
-      value: "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4"
-      description: API key for authentication
-      mandatory: true
+    - key: WHATSAPP_SWAGGER_USERNAME
+      value: admin
+      description: Swagger username
+      
+    - key: WHATSAPP_SWAGGER_PASSWORD
+      value: "admin123456789012345678901234"
+      description: Swagger password
       type: password
+      
+    - key: WAHA_DASHBOARD_ENABLED
+      value: "True"
        
-    - key: WAHA_ENGINE
+    - key: WHATSAPP_SWAGGER_ENABLED
+      value: "True"
+       
+    - key: WHATSAPP_DEFAULT_ENGINE
       value: webjs
-      description: WhatsApp engine (webjs, noweb, gows, venom)
        
-    - key: TZ
-      value: America/Lima
-      description: Timezone
+    - key: WAHA_BASE_URL
+      value: "http://localhost:3000"
+       
+    - key: WAHA_LOG_FORMAT
+      value: JSON
        
     - key: WAHA_LOG_LEVEL
       value: info
-      description: Log level (debug, info, warn, error)
+       
+    - key: WAHA_PRINT_QR
+      value: "False"
+       
+    - key: WAHA_MEDIA_STORAGE
+      value: LOCAL
+       
+    - key: WHATSAPP_FILES_LIFETIME
+      value: "0"
+       
+    - key: TZ
+      value: America/Lima
 
-  # Health Check
   health_check:
     enabled: true
     url: http://localhost:3000/api/server/status
