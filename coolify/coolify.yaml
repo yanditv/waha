@@ -1,89 +1,96 @@
 coolify:
   name: WAHA
-  description: WhatsApp HTTP API - Docker-based WhatsApp API (CORE version)
+  description: WhatsApp HTTP API - Official Coolify deployment
   icon: whatsapp
 
   resource:
-    type: docker-compose
-    
+    type: docker
+    docker_image: devlikeapro/waha
+    # For WAHA Plus use: devlikeapro/waha-plus
+
+  # Exposed ports
   ports:
     - container: 3000
-      host: ${WAHA_HOST_PORT:-3000}
+      host: 3000
       scheme: http
-      name: dashboard
+      name: http
 
+  # Persistent volumes (mounts)
   volumes:
-    - name: waha_sessions
+    - name: sessions
       path: /app/.sessions
       description: WhatsApp session data
-    - name: waha_media
+    - name: media
       path: /app/.media
       description: WhatsApp media files
 
+  # Environment variables
   env:
-    - key: WAHA_HOST_PORT
-      value: "3000"
-      description: Host port to expose WAHA
-      mandatory: true
-      
     - key: WAHA_API_KEY
       value: "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4"
       description: API key for authentication
       mandatory: true
       type: password
-      
+
     - key: WAHA_DASHBOARD_USERNAME
       value: admin
       description: Dashboard username
-      
+
     - key: WAHA_DASHBOARD_PASSWORD
-      value: "admin123456789012345678901234"
+      value: "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4"
       description: Dashboard password
       mandatory: true
       type: password
-      
+
     - key: WHATSAPP_SWAGGER_USERNAME
       value: admin
       description: Swagger username
-      
+
     - key: WHATSAPP_SWAGGER_PASSWORD
-      value: "admin123456789012345678901234"
+      value: "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4"
       description: Swagger password
       type: password
-      
-    - key: WAHA_DASHBOARD_ENABLED
-      value: "True"
-       
-    - key: WHATSAPP_SWAGGER_ENABLED
-      value: "True"
-       
-    - key: WHATSAPP_DEFAULT_ENGINE
-      value: webjs
-       
+
     - key: WAHA_BASE_URL
       value: "http://localhost:3000"
-       
+      description: Base URL for API
+
+    - key: WAHA_PUBLIC_URL
+      value: "http://localhost:3000"
+      description: Public URL for webhooks
+
+    - key: WAHA_DASHBOARD_ENABLED
+      value: "True"
+
+    - key: WHATSAPP_SWAGGER_ENABLED
+      value: "True"
+
+    - key: WHATSAPP_DEFAULT_ENGINE
+      value: webjs
+      description: WhatsApp engine
+
     - key: WAHA_LOG_FORMAT
       value: JSON
-       
+
     - key: WAHA_LOG_LEVEL
       value: info
-       
+
     - key: WAHA_PRINT_QR
       value: "False"
-       
+
     - key: WAHA_MEDIA_STORAGE
       value: LOCAL
-       
+
     - key: WHATSAPP_FILES_LIFETIME
       value: "0"
-       
-    - key: TZ
-      value: America/Lima
 
+    - key: WHATSAPP_FILES_FOLDER
+      value: /app/.media
+
+  # Healthcheck - use /ping endpoint
   health_check:
     enabled: true
-    url: http://localhost:3000/api/server/status
+    url: http://localhost:3000/ping
     interval: 30
     timeout: 10
     retries: 3
