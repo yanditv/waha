@@ -1,37 +1,42 @@
-# WAHA - WhatsApp HTTP API
+# WAHA Plus - WhatsApp HTTP API
 
 ## Deploy en Coolify
 
-### Configuración en Coolify
+### Configuración WAHA Plus
+
+Para usar **WAHA Plus**, necesitas:
+
+1. **WAHA Plus Key**: Tu ключ из https://portal.devlike.pro/
+
+2. **Docker Hub Login**: Debes hacer login antes de descargar la imagen:
+
+```bash
+docker login -u devlikeapro -p {WAHA_PLUS_KEY}
+docker pull devlikeapro/waha-plus
+docker logout
+```
+
+### En Coolify
 
 1. **Nuevo recurso** → Docker Compose
-2. **Repository**: Sube los archivos de `coolify/`
-3. **Docker Compose File**: `coolify/docker-compose.yaml`
-4. **Environment File**: `coolify/coolify.env`
+2. Sube los archivos de `coolify/`
+3. Configura el secreto `WAHA_PLUS_KEY` en Coolify
+4. El **Environment File** debe ser `coolify/coolify.env`
 
-### Variables obligatorias
-
-Configura estas variables en Coolify (Secrets):
+### Variables importantes
 
 | Variable | Descripción |
 |----------|-------------|
-| `WAHA_DASHBOARD_PASSWORD` | Contraseña para dashboard |
-| `WAHA_API_KEY` | API key (usa una cadena larga aleatoria) |
-
-### Importante
-
-- Las credenciales deben persistir entre reinicios
-- NO ejecutes `init-waha` - configura las variables directamente
--生成 una API key segura: `openssl rand -hex 32`
+| `WAHA_API_KEY` | API key para autenticación |
+| `WAHA_DASHBOARD_PASSWORD` | Contraseña del dashboard |
+| `WAHA_PLUS_KEY` | Tu key de WAHA Plus (secret) |
 
 ### URLs
 - Dashboard: `http://IP:3000/dashboard`
 - Swagger: `http://IP:3000/swagger`
 
-### Problemas comunes
+### Verifica funcionamiento
 
-**401 Unauthorized en health check**
-→ Verifica que `WAHA_DASHBOARD_PASSWORD` y `WAHA_API_KEY` estén configurados
-
-**Credenciales no persisten**
-→ El volumen `waha_env` guarda las credenciales en `/app/env`
+```bash
+curl -H "X-Api-Key: a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4" http://TU_IP:3000/api/server/status
+```
