@@ -8,25 +8,15 @@ services:
       - "${WAHA_HOST_PORT:-3000}:3000"
     volumes:
       - waha_sessions:/app/.sessions
-      - waha_env:/app/env
     environment:
-      - TZ=${TZ:-America/Guayaquil}
+      - TZ=${TZ:-America/Lima}
       - WAHA_DASHBOARD_USERNAME=${WAHA_DASHBOARD_USERNAME:-admin}
       - WAHA_DASHBOARD_PASSWORD=${WAHA_DASHBOARD_PASSWORD}
       - WAHA_API_KEY=${WAHA_API_KEY}
       - WAHA_ENGINE=${WAHA_ENGINE:-webjs}
       - WAHA_LOG_LEVEL=${WAHA_LOG_LEVEL:-info}
-      - WAHA_SESSION_TIMEOUT_MS=${WAHA_SESSION_TIMEOUT_MS:-120000}
-      - WAHA_SESSION_CLEANUP_INTERVAL_MS=${WAHA_SESSION_CLEANUP_INTERVAL_MS:-60}
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "wget", "--spider", "-q", "-O", "-", "--header=X-Api-Key:${WAHA_API_KEY}", "http://localhost:3000/api/server/status"]
-      interval: 30s
-      timeout: 10s
-      retries: 3
 
 volumes:
   waha_sessions:
-    driver: local
-  waha_env:
     driver: local
