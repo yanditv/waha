@@ -1,0 +1,68 @@
+coolify:
+  name: WAHA
+  description: WhatsApp HTTP API - Docker-based WhatsApp API
+  icon: whatsapp
+
+  # Resource Configuration
+  resource:
+    type: docker-compose
+    
+  # Exposed Ports
+  ports:
+    - container: 3000
+      host: 3000
+      scheme: http
+      name: dashboard
+
+  # Persistent Volumes
+  volumes:
+    - name: waha_sessions
+      path: /app/.sessions
+      description: WhatsApp session data
+
+  # Environment Variables (editable in Coolify)
+  env:
+    - key: WAHA_DASHBOARD_USERNAME
+      value: admin
+      description: Dashboard username
+      
+    - key: WAHA_DASHBOARD_PASSWORD
+      value: "CHANGE_ME"
+      description: Dashboard password (change in production)
+      mandatory: true
+      
+    - key: WAHA_API_KEY
+      value: "CHANGE_ME"
+      description: API key for authentication
+      mandatory: true
+      type: password
+      
+    - key: WAHA_ENGINE
+      value: webjs
+      description: WhatsApp engine (webjs, noweb, gows, venom)
+      optional: true
+      
+    - key: TZ
+      value: America/Lima
+      description: Timezone
+      optional: true
+      
+    - key: WAHA_LOG_LEVEL
+      value: info
+      description: Log level (debug, info, warn, error)
+      optional: true
+
+  # Health Check
+  health_check:
+    enabled: true
+    url: http://localhost:3000/api/health
+    interval: 30
+    timeout: 10
+    retries: 3
+
+  # Actions (post-deployment)
+  post_deploy:
+    - command: docker exec waha init-waha /app/env
+      description: Initialize WAHA credentials
+      run_at: "start"
+      continue_on_error: true

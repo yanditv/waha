@@ -2,37 +2,38 @@
 
 ## Deploy en Coolify
 
-### 1. Crear nuevo recurso
-- Selecciona **Docker Compose** como tipo de recurso
+### Instalación automática
 
-### 2. Configuración
-- **Repository**: Repo de tu proyecto o usa los archivos locales
-- **Branch**: main
-- **Build Pack**: Docker Compose
+1. **Nuevo recurso** → Busca "WAHA" o selecciona **Docker Compose**
 
-### 3. Docker Compose
-Copia el contenido de `coolify/docker-compose.yaml`
+2. **Repository**: Sube estos archivos o conecta tu repo Git
 
-### 4. Variables de entorno
-Copia `coolify/.env.example` y configura:
-- `WAHA_DASHBOARD_PASSWORD` - contraseña segura para dashboard
-- `WAHA_API_KEY` - API key larga y aleatoria
+3. **Branch**: main
 
-### 5. Puertos
-- Expón el puerto `3000`
+4. **Docker Compose File**: `coolify/docker-compose.yaml`
 
-### 6. Volúmenes persistentes
-- `/app/.sessions` → `waha_sessions`
+5. **Environment File**: `coolify/coolify.env`
 
-## Post-instalación
+6. **Puerto**: 3000
 
-### Generar credenciales seguras
+### Configuración automática
+
+Coolify detectará automáticamente:
+- ✅ Puerto 3000 expuesto
+- ✅ Volumen persistente `waha_sessions`
+- ✅ Health check en `/api/health`
+- ✅ Variables de entorno editables
+
+### Post-install
+
+Después del primer deploy, genera credenciales seguras:
+
 ```bash
-docker run --rm -v "$(pwd)/stack.env":/app/env devlikeapro/waha init-waha /app/env
+docker exec waha init-waha /app/env
 ```
 
-O desde Coolify, ejecuta el comando en la terminal del contenedor.
+O accede al dashboard en `http://IP:3000/dashboard`
 
-## URLs
+### URLs
 - Dashboard: `http://IP:3000/dashboard`
 - Swagger: `http://IP:3000/swagger`
