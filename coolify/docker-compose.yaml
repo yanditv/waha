@@ -1,0 +1,26 @@
+version: '3.8'
+
+x-common-env: &common_env
+  TZ: ${TZ:-America/Lima}
+
+services:
+  waha:
+    image: devlikeapro/waha
+    container_name: waha
+    ports:
+      - "3000:3000"
+    volumes:
+      - waha_sessions:/app/.sessions
+    env_file:
+      - stack.env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+    <<: *common_env
+
+volumes:
+  waha_sessions:
+    driver: local
